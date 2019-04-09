@@ -1,138 +1,20 @@
 package com.example.alexv.proyectoturismo;
 
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-
-public interface Minubeservice {
-/*
-    @SerializedName("id":"2662972")
-    @Expose
-    public String id;
-    @SerializedName("name":"Porto 7 Coctelería")
-    @Expose
-    public String name;
-    @SerializedName("latitude":"42.238276769706")
-    @Expose
-    public String latitude;
-    @SerializedName("longitude":"-8.716521528884")
-    @Expose
-    public String longitude;
-    @SerializedName("country_id":"63")
-    @Expose
-    public String countryId;
-    @SerializedName("zone_id":"1025")
-    @Expose
-    public String zoneId;
-    @SerializedName("city_id":"1268")
-    @Expose
-    public String cityId;
-    @SerializedName("subcategory_id":"0")
-    @Expose
-    public String subcategoryId;
-    @SerializedName("distance")
-    @Expose
-
-    for (string[ArrayList<pois>] = 0; [ArrayList<pois>pois.length]; [Arrraylist<pois>]pois++)
-    {
-        List<String> places = Arrays.asList("id", "name", "latitude", "Longitude", "Country_id", "zone_id", "city_id", "subcategory_id", "distance");
-
-        if()
-            @GET("pois")
-            Call<NoticeList> getPois(@Query("longitud"));
-
-            @GET("pois")
-            Call<NoticeList> getPois(@Query("longitud"));
-    }*/
-}
-package com.example.alexv.proyectoturismo;
-
-import com.google.gson.annotations.SerializedName;
-
-public class Poi {
-
-    @SerializedName("id")
-    public String id;
-    @SerializedName("name")
-    
-    public String name;
-    @SerializedName("latitude")
-    
-    public String latitude;
-    @SerializedName("longitude")
-    
-    public String longitude;
-    @SerializedName("country_id")
-    
-    public String countryId;
-    @SerializedName("zone_id")
-    
-    public String zoneId;
-    @SerializedName("city_id")
-    
-    public String cityId;
-    @SerializedName("subcategory_id")
-    
-    public String subcategoryId;
-    @SerializedName("distance")
-    
-    public String distance;
-
-}
-package com.example.alexv.proyectoturismo;
-
-        import retrofit2.Retrofit;
-        import retrofit2.converter.gson.GsonConverterFactory;
-
-public class RetrofitInstance {
-
-    private static Retrofit retrofit;
-    private static final String BASE_URL = "http://papi.minube.com/";
-    private static final String PUBLIC_KEY = "V8p7DUAN3G3mwh5H";
-
-    /**
-     * Create an instance of Retrofit object
-     * */
-    public static Retrofit getRetrofitInstance() {
-        if (retrofit == null) {
-            retrofit = new retrofit2.Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit;
-    }
-}
-
-
-//cLASE MAIN
-
-package com.example.alexv.proyectoturismo;
-
-import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 import com.here.android.mpa.common.GeoCoordinate;
-import com.here.android.mpa.common.Image;
+import com.here.android.mpa.common.GeoPosition;
 import com.here.android.mpa.common.OnEngineInitListener;
-import com.here.android.mpa.internal.v;
+import com.here.android.mpa.internal.restrouting.Route;
+import com.here.android.mpa.internal.restrouting.Waypoint;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapMarker;
 import com.here.android.mpa.mapping.SupportMapFragment;
@@ -141,17 +23,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int SELECT_FILE = 1;
     ArrayList<String> zoneList = new ArrayList<>();
     ArrayList<Double> zoneLatitud = new ArrayList<>();
     ArrayList<Double> zoneLongitud = new ArrayList<>();
+
 
     // map embedded in the map fragment
     private Map map = null;
@@ -159,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
     // map fragment embedded in this activity
     private SupportMapFragment mapFragment;
 
-    private AutoCompleteTextView textBoxLocation,textBoxSaveLocation,textBoxGalleryLocation;
-
-
-
+    private AutoCompleteTextView textBoxLocation,textBoxSaveLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         initialize();
         textBoxLocation = findViewById(R.id.TextBoxLocation);
         textBoxSaveLocation = findViewById(R.id.textBoxSaveLocation);
-        textBoxGalleryLocation = findViewById(R.id.txtBoxGoLocation);
 
         Button buttonLocate = findViewById(R.id.btnLocate);
         buttonLocate.setOnClickListener(new View.OnClickListener() {
@@ -189,20 +65,63 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonGallery = findViewById(R.id.btnGallery);
-        buttonGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(textBoxGalleryLocation.getText().toString());
-            }
-        });
+
+        package com.example;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+        public class NuevaRuta {
+
+            ArrayList<String> places = new ArrayList<String>();
+            places.add("id");
+            places.add("name");
+            places.add("latitude");
+            places.add("Longitude");
+            places.add("contry_id");
+            places.add("zone_id");
+            places.add("city_id");
+            places.add("subcategory_id");
+            places.add("distance");
+        }
+
+            @SerializedName("id":"2662972")
+            @Expose
+            public String id;
+            @SerializedName("name":"Porto 7 Coctelería")
+            @Expose
+            public String name;
+            @SerializedName("latitude":"42.238276769706")
+            @Expose
+            public String latitude;
+            @SerializedName("longitude":"-8.716521528884")
+            @Expose
+            public String longitude;
+            @SerializedName("country_id":"63")
+            @Expose
+            public String countryId;
+            @SerializedName("zone_id":"1025")
+            @Expose
+            public String zoneId;
+            @SerializedName("city_id":"1268")
+            @Expose
+            public String cityId;
+            @SerializedName("subcategory_id":"0")
+            @Expose
+            public String subcategoryId;
+            @SerializedName("distance")
+            @Expose
+            public String distance;
+
+        for (int i = 0; i < 4; i++) {
+            List<String> places = Arrays.asList("id", "name", "latitude", "Longitude", "Country_id", "zone_id", "city_id", "subcategory_id", "distance");
+        }   
+
+
+
+
+
     }
-
-
-
-
-
-
 
     public void getJSON(){
         String json;
@@ -248,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(index == -1){
             Toast.makeText(getApplicationContext(), "No existe esta localización \n Puedes guardar la ubicación actual o una que señales en el mapa", Toast.LENGTH_LONG);
+            setNewGeoCoordinate();
             return;
         }
 
@@ -295,19 +215,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void setNewGeoCoordinate(){
-               zoneList.add(textBoxSaveLocation.getText().toString());
+               // map.getPositionIndicator();
+               zoneList.add(textBoxLocation.getText().toString());
                zoneLatitud.add(map.getCenter().getLatitude());
                zoneLongitud.add(map.getCenter().getLongitude());
                mapFragment.getMap().addMapObject(new MapMarker(new GeoCoordinate(zoneLatitud.get(zoneLatitud.size()-1),zoneLongitud.get(zoneLongitud.size()-1))));
-    }
 
-    public void startActivity(String location){
-        Intent intent = new Intent(this,InterestPointGallery.class);
-        intent.putExtra("Location",location);
-        startActivity(intent);
     }
-
 
 }
